@@ -1,0 +1,17 @@
+﻿.my-component {
+    border: 2px dashed red;
+    padding: 1em;
+    margin: 1em 0;
+    background-image: url('background.png');
+}
+.import-statement{
+    margin-top:30px;
+    font-style:italic;
+}
+.border {
+    border: 2px solid;
+    padding: 10px;
+    box-shadow: 6px 4px 8px -2px;
+    margin-top: 25px;
+    margin-bottom: 5px
+}

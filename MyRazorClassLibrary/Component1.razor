@@ -1,0 +1,46 @@
+﻿@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Forms
+@using Common;
+
+@inject IJSRuntime JSRuntime
+@implements Common.IComponent
+@implements IAsyncDisposable
+
+Enter your name:
+<input @bind="Name" />
+<button @onclick="Submit">Submit</button>
+
+<div class="border">
+    @ContextDataModel.Organization;
+    @ContextDataModel.Application;
+    @ContextDataModel.User.Name;
+</div>
+
+<div class="import-statement">**This component is imported from MyRazorClas Library**</div>
+
+@code {
+    [Parameter] public ContextDataModel ContextDataModel { get; set; }
+
+    private string Name;
+    private Task<IJSObjectReference> _Module;
+
+    @* TODO: You need to replace MyRazorClassLibrary with the actual name of your library *@
+    const string ImportPath = "./_content/MyRazorClassLibrary/exampleJsInterop.js";
+    private Task<IJSObjectReference> Module => _Module ??= JSRuntime.InvokeAsync<IJSObjectReference>("import", ImportPath).AsTask();
+
+    async Task Submit()
+    {
+        var module = await Module;
+        await module.InvokeVoidAsync("showPrompt", Name);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_Module != null)
+        {
+            var module = await _Module;
+            await module.DisposeAsync();
+        }
+    }
+}
